@@ -14,7 +14,7 @@ const Landing: React.FC = () => {
       <header className="container py-6">
         <div className="flex justify-between items-center">
           <Link to="/" className="text-2xl font-bold text-white">
-            ShapeSense
+            grounded.ai
           </Link>
           
           <nav className="hidden md:flex items-center space-x-8">
@@ -137,7 +137,7 @@ const Landing: React.FC = () => {
       
       <footer className="container py-12 mt-20">
         <div className="text-center text-white/60 text-sm">
-          &copy; 2025 ShapeSense. All rights reserved.
+          &copy; 2025 grounded.ai. All rights reserved.
         </div>
       </footer>
     </div>

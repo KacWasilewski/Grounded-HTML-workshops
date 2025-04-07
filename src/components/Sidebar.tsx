@@ -53,12 +53,12 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle }) => {
       <div className="flex items-center px-4 py-6">
         {!collapsed && (
           <Link to="/" className="text-2xl font-bold text-brand-900">
-            ShapeSense
+            grounded.ai
           </Link>
         )}
         {collapsed && (
           <Link to="/" className="text-2xl font-bold text-brand-900 mx-auto">
-            S
+            g
           </Link>
         )}
       </div>
