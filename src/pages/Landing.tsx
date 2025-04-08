@@ -77,11 +77,11 @@ const Landing: React.FC = () => {
             asChild 
             variant="outline" 
             size="lg" 
-            className="text-lg px-8 text-white border-white/30 hover:bg-brand-600 hover:border-brand-600 hover:text-white bg-brand-500 shadow-lg hover:shadow-xl transform transition-all duration-300 animate-pulse hover:animate-none"
+            className="text-lg px-8 text-white border-white/30 hover:bg-white/10 opacity-50 hover:opacity-100 transition-all duration-300"
           >
             <Link to="/tutorials" className="flex items-center gap-2">
-              <Play className="h-5 w-5 fill-current" />
-              <span>WATCH TUTORIALS</span>
+              <Play className="h-5 w-5" />
+              <span>Watch Tutorials</span>
             </Link>
           </Button>
         </div>
