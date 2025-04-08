@@ -3,6 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import ThreeBackground from '@/components/ThreeBackground';
+import { Play } from 'lucide-react';
 
 const Landing: React.FC = () => {
   return (
@@ -72,8 +73,16 @@ const Landing: React.FC = () => {
             <Link to="/dashboard">Start Designing</Link>
           </Button>
           
-          <Button asChild variant="outline" size="lg" className="text-lg px-8 text-white border-white/30 hover:bg-white/10">
-            <Link to="/tutorials">Watch Tutorial</Link>
+          <Button 
+            asChild 
+            variant="outline" 
+            size="lg" 
+            className="text-lg px-8 text-white border-white/30 hover:bg-brand-600 hover:border-brand-600 hover:text-white bg-brand-500 shadow-lg hover:shadow-xl transform transition-all duration-300 animate-pulse hover:animate-none"
+          >
+            <Link to="/tutorials" className="flex items-center gap-2">
+              <Play className="h-5 w-5 fill-current" />
+              <span>WATCH TUTORIALS</span>
+            </Link>
           </Button>
         </div>
         
