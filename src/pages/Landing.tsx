@@ -68,21 +68,9 @@ const Landing: React.FC = () => {
           Fast, intelligent, and intuitive.
         </p>
         
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+        <div className="flex justify-center mb-20">
           <Button asChild size="lg" className="text-lg px-8">
             <Link to="/dashboard">Start Designing</Link>
-          </Button>
-          
-          <Button 
-            asChild 
-            variant="outline" 
-            size="lg" 
-            className="text-lg px-8 border-white/30 hover:bg-white/10 opacity-50 hover:opacity-100 transition-all duration-300"
-          >
-            <Link to="/tutorials" className="flex items-center gap-2">
-              <Play className="h-5 w-5 text-white" />
-              <span className="font-medium text-white">Watch Tutorials</span>
-            </Link>
           </Button>
         </div>
         
