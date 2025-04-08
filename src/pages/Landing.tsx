@@ -81,7 +81,7 @@ const Landing: React.FC = () => {
           >
             <Link to="/tutorials" className="flex items-center gap-2">
               <Play className="h-5 w-5" />
-              <span>Watch Tutorials</span>
+              <span className="text-white">Watch Tutorials</span>
             </Link>
           </Button>
         </div>
