@@ -1,58 +1,104 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Upload, X, FileUp } from 'lucide-react';
+import { Spinner } from '@/components/ui/spinner';
+import { Upload, X, FileUp, File3d } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface FileUploadProps {
-  onUploadComplete?: (fileName: string, fileUrl: string, fileType: string) => void;
+  onUploadComplete?: (fileName: string, fileUrl: string, fileType: string, fileSize: number) => void;
   accept?: string;
+  maxSize?: number; // in MB
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ 
   onUploadComplete,
-  accept = ".obj,.stl,.glb" 
+  accept = ".obj,.stl,.glb,.gltf",
+  maxSize = 50 // Default 50MB limit
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dragCounter = useRef(0);
+  
+  const validFileTypes = accept.split(',').map(type => type.trim().replace('.', ''));
+  
+  useEffect(() => {
+    // Clean up URL on unmount
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+  
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current++;
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+      setIsDragging(true);
+    }
+  };
+  
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragCounter.current--;
+    if (dragCounter.current === 0) {
+      setIsDragging(false);
+    }
+  };
   
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setIsDragging(true);
-  };
-  
-  const handleDragLeave = () => {
-    setIsDragging(false);
+    e.stopPropagation();
   };
   
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
+    dragCounter.current = 0;
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileSelect(e.dataTransfer.files[0]);
+      validateAndSetFile(e.dataTransfer.files[0]);
     }
   };
   
-  const handleFileSelect = (selectedFile: File) => {
-    // Check if file extension is allowed
-    const fileExt = selectedFile.name.split('.').pop()?.toLowerCase();
-    const allowedExts = accept.split(',').map(ext => ext.replace('.', ''));
-    
-    if (fileExt && allowedExts.includes(fileExt)) {
-      setFile(selectedFile);
-    } else {
-      toast.error(`Only ${accept} files are allowed`);
+  const validateAndSetFile = (selectedFile: File) => {
+    // Check file size
+    const fileSizeMB = selectedFile.size / (1024 * 1024);
+    if (fileSizeMB > maxSize) {
+      toast.error(`File size exceeds the maximum limit of ${maxSize}MB`);
+      return;
     }
+    
+    // Check file extension
+    const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
+    if (!fileExtension || !validFileTypes.includes(fileExtension)) {
+      toast.error(`Only ${validFileTypes.join(', ')} files are allowed`);
+      return;
+    }
+    
+    setFile(selectedFile);
+    
+    // Create object URL for preview
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    
+    // For 3D files, we'll just create a placeholder preview
+    setPreviewUrl(URL.createObjectURL(selectedFile));
   };
   
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      handleFileSelect(e.target.files[0]);
+      validateAndSetFile(e.target.files[0]);
     }
   };
   
@@ -62,46 +108,54 @@ const FileUpload: React.FC<FileUploadProps> = ({
     setIsUploading(true);
     
     // Simulate file upload with progress
-    for (let i = 0; i <= 100; i += 10) {
-      setUploadProgress(i);
+    const totalSteps = 10;
+    for (let i = 1; i <= totalSteps; i++) {
+      setUploadProgress((i / totalSteps) * 100);
       await new Promise(resolve => setTimeout(resolve, 200));
     }
     
-    // In a real app, you would upload to your backend here
-    // const formData = new FormData();
-    // formData.append('file', file);
-    // const response = await fetch('your-backend-url/upload', {
-    //   method: 'POST',
-    //   body: formData,
-    // });
+    // In a real application, you would upload to a backend here
+    // For now, we'll simulate a successful upload
     
-    // Simulate successful upload
+    // Create a file URL (in a real app, this would be the URL from the server)
     const fileUrl = URL.createObjectURL(file);
-    const fileType = file.name.split('.').pop()?.toLowerCase() as 'obj' | 'stl' | 'glb';
+    const fileType = file.name.split('.').pop()?.toLowerCase() as string;
     
     if (onUploadComplete) {
-      onUploadComplete(file.name, fileUrl, fileType);
+      onUploadComplete(file.name, fileUrl, fileType, file.size);
     }
     
     toast.success('Upload complete!');
     setIsUploading(false);
     setFile(null);
     setUploadProgress(0);
+    
+    // Clean up the preview URL
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
   };
   
   const handleCancel = () => {
     setFile(null);
     setUploadProgress(0);
     setIsUploading(false);
+    
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
   };
   
   return (
     <div 
       className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
-        isDragging ? 'border-brand-500 bg-brand-50' : 'border-border'
+        isDragging ? 'border-brand-500 bg-brand-50/10' : 'border-border'
       }`}
-      onDragOver={handleDragOver}
+      onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       <input
@@ -114,14 +168,18 @@ const FileUpload: React.FC<FileUploadProps> = ({
       
       {file ? (
         <div className="space-y-4">
-          <div className="flex items-center justify-between bg-secondary p-3 rounded-lg">
+          <div className="flex items-start justify-between bg-secondary p-3 rounded-lg">
             <div className="flex items-center">
-              <FileUp className="h-6 w-6 text-brand-700 mr-3" />
+              <div className="bg-primary/10 p-2 rounded-md mr-3">
+                <File3d className="h-6 w-6 text-primary" />
+              </div>
               <div className="text-left">
                 <p className="font-medium truncate max-w-xs">{file.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {(file.size / (1024 * 1024)).toFixed(2)} MB
-                </p>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <span className="uppercase mr-2">{file.name.split('.').pop()}</span>
+                  <span>•</span>
+                  <span className="ml-2">{(file.size / (1024 * 1024)).toFixed(2)} MB</span>
+                </div>
               </div>
             </div>
             <Button 
@@ -135,7 +193,13 @@ const FileUpload: React.FC<FileUploadProps> = ({
           </div>
           
           {isUploading && (
-            <Progress value={uploadProgress} className="h-2" />
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Uploading...</span>
+                <span>{Math.round(uploadProgress)}%</span>
+              </div>
+              <Progress value={uploadProgress} className="h-2" />
+            </div>
           )}
           
           <div className="flex justify-end space-x-2">
@@ -150,14 +214,19 @@ const FileUpload: React.FC<FileUploadProps> = ({
               onClick={handleUpload}
               disabled={isUploading}
             >
-              {isUploading ? 'Uploading...' : 'Upload File'}
+              {isUploading ? (
+                <>
+                  <Spinner size="sm" className="mr-2" />
+                  Uploading...
+                </>
+              ) : 'Upload Model'}
             </Button>
           </div>
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="mx-auto w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center">
-            <Upload className="h-6 w-6 text-brand-700" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-brand-100/20 flex items-center justify-center">
+            <Upload className="h-8 w-8 text-brand-700" />
           </div>
           <div>
             <h3 className="text-lg font-medium">Upload your 3D model</h3>
@@ -166,11 +235,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
             </p>
           </div>
           <div className="text-xs text-muted-foreground">
-            Supports {accept} files
+            Supports {validFileTypes.join(', ')} files up to {maxSize}MB
           </div>
           <Button
             onClick={() => fileInputRef.current?.click()}
             variant="outline"
+            className="mt-2"
           >
             Choose File
           </Button>
