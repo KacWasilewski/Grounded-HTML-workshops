@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ThreeViewer from '@/components/ThreeViewer';
@@ -48,7 +47,6 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
-// Expanded project data structure
 interface ProjectData {
   id: string;
   name: string;
@@ -64,7 +62,6 @@ interface ProjectData {
   thumbnail?: string;
 }
 
-// Dummy project data
 const dummyProjects: Record<string, ProjectData> = {
   '1': {
     id: '1',
@@ -125,7 +122,6 @@ const Project: React.FC = () => {
   
   useEffect(() => {
     if (id) {
-      // In a real app, you would fetch the project from an API
       const projectData = dummyProjects[id];
       
       if (projectData) {
@@ -176,10 +172,8 @@ const Project: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // In a real app, this would be an API call to update the project
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      // Update the local project data
       setProject({
         ...project,
         name: formData.name,
@@ -202,7 +196,6 @@ const Project: React.FC = () => {
   };
   
   const handleCancel = () => {
-    // Reset form data to original project data
     setFormData({
       name: project.name,
       description: project.description || '',
@@ -222,7 +215,6 @@ const Project: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // In a real app, this would be an API call to delete the project
       await new Promise(resolve => setTimeout(resolve, 800));
       
       toast.success('Project deleted successfully');
@@ -251,10 +243,8 @@ const Project: React.FC = () => {
   };
   
   const handleShare = () => {
-    // In a real app, this would generate a shareable link
     const shareUrl = `https://grounded.ai/shared/${project.id}`;
     
-    // Copy to clipboard
     navigator.clipboard.writeText(shareUrl);
     toast.success('Share link copied to clipboard');
   };
@@ -263,11 +253,9 @@ const Project: React.FC = () => {
     setIsLoading(true);
     
     try {
-      // In a real app, this would be an API call to duplicate the project
       await new Promise(resolve => setTimeout(resolve, 800));
       
       toast.success('Project duplicated successfully');
-      // In a real app, you would navigate to the new project ID
       navigate('/dashboard');
     } catch (error) {
       console.error('Error duplicating project:', error);
@@ -566,6 +554,7 @@ const Project: React.FC = () => {
           modelUrl={project.modelUrl} 
           modelType={project.modelType}
           showStats={false}
+          projectName={project.name}
         />
       </div>
       

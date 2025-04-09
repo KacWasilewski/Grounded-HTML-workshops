@@ -39,15 +39,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }).format(date);
   };
   
-  // Set of architectural 3D model preview images
+  // Set of architectural 3D model preview images - updated with more realistic architectural models
   const modelPreviewImages = [
-    'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800', // white concrete building
-    'https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=800', // white concrete building
-    'https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800', // bottom view of glass building
-    'https://images.unsplash.com/photo-1497604401993-f2e922e5cb0a?w=800', // worm's eye view of glass building
-    'https://images.unsplash.com/photo-1551038247-3d9af20df552?w=800', // blue and white building
-    'https://images.unsplash.com/photo-1524230572899-a752b3835840?w=800', // white concrete building
-    'https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=800'  // building with wavy lines
+    'https://media.sketchfab.com/models/78352d6c89734f4e9a956979393b72a6/thumbnails/71c92d0aff764dddb37a5646ec44d8e2/f92aca2eab5e4e9e92a72b157415a879.jpeg', // modern building
+    'https://media.sketchfab.com/models/ac8f21739d264c87bea55b66c8a9d0ba/thumbnails/d2998adadb0948ada71b618a7cce6b33/36516a1dc4794b73976045b57b2ce5a3.jpeg', // apartment building
+    'https://media.sketchfab.com/models/1834bdfb7aad44aaa16c41d8f7b54815/thumbnails/edb87e53a8cc49c2a45db6301e09e4e6/8bdf87d2157d463084efd4302295f39d.jpeg', // house model
+    'https://media.sketchfab.com/models/7e99f9e40f294beead90db8216218c45/thumbnails/8ef3a9e2086841898c57c84e3bb2e51e/79ed3bec1f7f4f7da5c0b6e1b61bad96.jpeg', // modern home
+    'https://media.sketchfab.com/models/27a428162ee04e17abef5d2757f8885e/thumbnails/b31b210dfae14d34bd7ebfcf245134a4/c46dbbcbee3240b3aa79e4b61adbaba8.jpeg', // house facade
+    'https://media.sketchfab.com/models/cb07df5fc86a41f4823e68f6c8fe8bf6/thumbnails/97b2c7e85ede4d9b9176af10d4fd59c6/6ccb5dae3ffe4a11b7aed056afadf13e.jpeg', // building exterior
+    'https://media.sketchfab.com/models/9d72f13c88fb4b72894b1bd2db4988b6/thumbnails/d4d8b62e83694d059e6d46a2b2d7cdbd/1024x576.jpeg'  // architectural model
   ];
   
   // Get a deterministic thumbnail based on the project ID
