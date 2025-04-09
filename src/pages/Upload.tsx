@@ -28,7 +28,7 @@ interface UploadFormData {
 const Upload: React.FC = () => {
   const [fileName, setFileName] = useState('');
   const [fileUrl, setFileUrl] = useState('');
-  const [fileType, setFileType] = useState<'obj' | 'stl' | 'glb' | 'gltf' | ''>('');
+  const [fileType, setFileType] = useState<'obj' | 'stl' | 'glb' | 'gltf' | null>(null);
   const [fileSize, setFileSize] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -236,7 +236,7 @@ const Upload: React.FC = () => {
           </div>
           
           <div className="h-[500px] border rounded-lg overflow-hidden">
-            {fileUrl ? (
+            {fileUrl && fileType ? (
               <ThreeViewer modelUrl={fileUrl} modelType={fileType} />
             ) : (
               <div className="h-full flex items-center justify-center bg-accent/20 text-muted-foreground">

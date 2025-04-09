@@ -1,9 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Spinner } from '@/components/ui/spinner';
-import { Upload, X, FileUp, File3d } from 'lucide-react';
+import { Upload, X, FileUp, File } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface FileUploadProps {
@@ -28,7 +27,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
   const validFileTypes = accept.split(',').map(type => type.trim().replace('.', ''));
   
   useEffect(() => {
-    // Clean up URL on unmount
     return () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl);
@@ -71,14 +69,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
   };
   
   const validateAndSetFile = (selectedFile: File) => {
-    // Check file size
     const fileSizeMB = selectedFile.size / (1024 * 1024);
     if (fileSizeMB > maxSize) {
       toast.error(`File size exceeds the maximum limit of ${maxSize}MB`);
       return;
     }
     
-    // Check file extension
     const fileExtension = selectedFile.name.split('.').pop()?.toLowerCase();
     if (!fileExtension || !validFileTypes.includes(fileExtension)) {
       toast.error(`Only ${validFileTypes.join(', ')} files are allowed`);
@@ -87,12 +83,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
     
     setFile(selectedFile);
     
-    // Create object URL for preview
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
     
-    // For 3D files, we'll just create a placeholder preview
     setPreviewUrl(URL.createObjectURL(selectedFile));
   };
   
@@ -107,17 +101,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
     
     setIsUploading(true);
     
-    // Simulate file upload with progress
     const totalSteps = 10;
     for (let i = 1; i <= totalSteps; i++) {
       setUploadProgress((i / totalSteps) * 100);
       await new Promise(resolve => setTimeout(resolve, 200));
     }
     
-    // In a real application, you would upload to a backend here
-    // For now, we'll simulate a successful upload
-    
-    // Create a file URL (in a real app, this would be the URL from the server)
     const fileUrl = URL.createObjectURL(file);
     const fileType = file.name.split('.').pop()?.toLowerCase() as string;
     
@@ -130,7 +119,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
     setFile(null);
     setUploadProgress(0);
     
-    // Clean up the preview URL
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
       setPreviewUrl(null);
@@ -171,7 +159,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <div className="flex items-start justify-between bg-secondary p-3 rounded-lg">
             <div className="flex items-center">
               <div className="bg-primary/10 p-2 rounded-md mr-3">
-                <File3d className="h-6 w-6 text-primary" />
+                <File className="h-6 w-6 text-primary" />
               </div>
               <div className="text-left">
                 <p className="font-medium truncate max-w-xs">{file.name}</p>

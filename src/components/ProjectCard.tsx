@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { File3d, MapPin, Calendar } from 'lucide-react';
+import { File, MapPin, Calendar } from 'lucide-react';
 
 interface ProjectCardProps {
   id: string;
@@ -75,7 +75,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   </Badge>
                 )}
               </div>
-              <File3d className="h-12 w-12 text-brand-700 mb-2" />
+              <File className="h-12 w-12 text-brand-700 mb-2" />
               <span className="text-brand-900 text-center font-medium line-clamp-2">
                 {name}
               </span>

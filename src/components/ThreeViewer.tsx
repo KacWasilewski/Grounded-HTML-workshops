@@ -16,10 +16,12 @@ import {
 import { Button } from './ui/button';
 import { Spinner } from './ui/spinner';
 import { RotateCcw, ZoomIn, ZoomOut, Maximize2, FileDown, Grid as GridIcon, Layers, Info } from 'lucide-react';
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import * as THREE from 'three';
+
+// Import loaders from three/addons
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 interface ThreeViewerProps {
   modelUrl?: string;
@@ -53,7 +55,7 @@ const Model = ({ url, type, onLoadingComplete }: {
 
     const loadModel = async () => {
       try {
-        let loadedModel: THREE.Object3D | THREE.Group | THREE.BufferGeometry;
+        let loadedModel: THREE.Object3D;
         
         if (type === 'glb' || type === 'gltf') {
           const gltfLoader = new GLTFLoader();
@@ -78,6 +80,7 @@ const Model = ({ url, type, onLoadingComplete }: {
             metalness: 0.1 
           });
           
+          // Create a mesh from the geometry
           loadedModel = new THREE.Mesh(geometry, material);
         } else {
           throw new Error("Unsupported file type");
