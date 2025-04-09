@@ -39,6 +39,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }).format(date);
   };
   
+  // Set of architectural 3D model preview images
+  const modelPreviewImages = [
+    'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800', // white concrete building
+    'https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=800', // white concrete building
+    'https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800', // bottom view of glass building
+    'https://images.unsplash.com/photo-1497604401993-f2e922e5cb0a?w=800', // worm's eye view of glass building
+    'https://images.unsplash.com/photo-1551038247-3d9af20df552?w=800', // blue and white building
+    'https://images.unsplash.com/photo-1524230572899-a752b3835840?w=800', // white concrete building
+    'https://images.unsplash.com/photo-1493397212122-2b85dda8106b?w=800'  // building with wavy lines
+  ];
+  
+  // Get a deterministic thumbnail based on the project ID
+  const getDefaultThumbnail = () => {
+    // Convert the id to a number by summing character codes
+    const idSum = id.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    // Use the sum to pick an image from the array
+    return modelPreviewImages[idSum % modelPreviewImages.length];
+  };
+  
   const getTimeAgo = (date: Date) => {
     const now = new Date();
     const diffInMs = now.getTime() - date.getTime();
@@ -56,13 +75,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }
   };
   
+  // Use provided thumbnail or get a default one
+  const displayThumbnail = thumbnail || getDefaultThumbnail();
+  
   return (
     <Link to={`/project/${id}`}>
       <Card className={cn("overflow-hidden transition-all hover:shadow-md hover:-translate-y-1 duration-200", className)}>
         <div className="relative aspect-square bg-muted">
-          {thumbnail ? (
+          {displayThumbnail ? (
             <img
-              src={thumbnail}
+              src={displayThumbnail}
               alt={name}
               className="w-full h-full object-cover"
             />
@@ -79,6 +101,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               <span className="text-brand-900 text-center font-medium line-clamp-2">
                 {name}
               </span>
+            </div>
+          )}
+          
+          {/* Add a badge for model type overlay on the thumbnail */}
+          {displayThumbnail && modelType && (
+            <div className="absolute top-2 right-2">
+              <Badge variant="outline" className="uppercase text-xs bg-black/40 text-white border-none">
+                {modelType}
+              </Badge>
             </div>
           )}
         </div>

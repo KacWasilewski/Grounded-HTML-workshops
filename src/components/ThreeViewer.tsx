@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { 
@@ -41,11 +40,7 @@ const Model = ({ url, type, onLoadingComplete }: {
   
   useEffect(() => {
     if (!url) {
-      // Default cube when no model is provided
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const material = new THREE.MeshStandardMaterial({ color: "#6373f2", roughness: 0.3, metalness: 0.1 });
-      const mesh = new THREE.Mesh(geometry, material);
-      setModel(mesh);
+      setIsLoading(false);
       if (onLoadingComplete) onLoadingComplete();
       return;
     }
@@ -80,13 +75,11 @@ const Model = ({ url, type, onLoadingComplete }: {
             metalness: 0.1 
           });
           
-          // Create a mesh from the geometry
           loadedModel = new THREE.Mesh(geometry, material);
         } else {
           throw new Error("Unsupported file type");
         }
 
-        // Center and normalize the model
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
@@ -138,10 +131,11 @@ const SceneContainer = ({ children, onFit }: { children: React.ReactNode; onFit:
   const bounds = useBounds();
   
   useEffect(() => {
-    // Fit view to model after a short delay to ensure model is loaded
     const timer = setTimeout(() => {
-      bounds.refresh().fit();
-      onFit();
+      if (bounds) {
+        bounds.refresh().fit();
+        onFit();
+      }
     }, 500);
     
     return () => clearTimeout(timer);
@@ -213,9 +207,18 @@ const ThreeViewer: React.FC<ThreeViewerProps> = ({
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 7.5]} intensity={1} castShadow />
         
-        <SceneContainer onFit={handleFitComplete}>
-          <Model url={modelUrl} type={modelType} onLoadingComplete={handleLoadingComplete} />
-        </SceneContainer>
+        {modelUrl ? (
+          <SceneContainer onFit={handleFitComplete}>
+            <Model url={modelUrl} type={modelType} onLoadingComplete={handleLoadingComplete} />
+          </SceneContainer>
+        ) : (
+          <Html center>
+            <div className="text-center p-4 bg-black/20 rounded-lg backdrop-blur-sm">
+              <p className="text-white">No model loaded</p>
+              <p className="text-white/70 text-sm mt-1">Upload a 3D model to view</p>
+            </div>
+          </Html>
+        )}
         
         {showGrid && <Grid infiniteGrid fadeDistance={30} />}
         <OrbitControls 
@@ -346,7 +349,6 @@ const ThreeViewer: React.FC<ThreeViewerProps> = ({
           <div className="space-y-1 text-sm">
             <p><span className="font-medium">Type:</span> {modelType.toUpperCase()}</p>
             <p><span className="font-medium">File:</span> {modelUrl.split('/').pop()}</p>
-            {/* More model info would be available with real server integration */}
           </div>
         </div>
       )}

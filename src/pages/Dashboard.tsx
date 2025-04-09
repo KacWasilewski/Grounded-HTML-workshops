@@ -48,7 +48,7 @@ const dummyProjects: Project[] = [
   {
     id: '2',
     name: 'Office Tower Design',
-    thumbnail: 'https://images.unsplash.com/photo-1460574283810-2aab119d8511?w=800',
+    thumbnail: 'https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=800',
     createdAt: new Date('2025-03-01'),
     lastModified: new Date('2025-03-28'),
     modelType: 'stl',
@@ -60,7 +60,7 @@ const dummyProjects: Project[] = [
   {
     id: '3',
     name: 'Residential Complex',
-    thumbnail: 'https://images.unsplash.com/photo-1459767129954-1b1c1f9b9ace?w=800',
+    thumbnail: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800',
     createdAt: new Date('2025-02-20'),
     lastModified: new Date('2025-04-05'),
     modelType: 'glb',
@@ -72,7 +72,7 @@ const dummyProjects: Project[] = [
   {
     id: '4',
     name: 'Exhibition Pavilion',
-    thumbnail: 'https://images.unsplash.com/photo-1496307653780-42ee777d4833?w=800',
+    thumbnail: 'https://images.unsplash.com/photo-1497604401993-f2e922e5cb0a?w=800',
     createdAt: new Date('2025-02-10'),
     lastModified: new Date('2025-03-20'),
     modelType: 'obj',
@@ -84,6 +84,7 @@ const dummyProjects: Project[] = [
   {
     id: '5',
     name: 'Container House Prototype',
+    thumbnail: 'https://images.unsplash.com/photo-1551038247-3d9af20df552?w=800',
     createdAt: new Date('2025-01-30'),
     lastModified: new Date('2025-03-15'),
     modelType: 'stl',
