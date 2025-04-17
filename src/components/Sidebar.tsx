@@ -91,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed = false, onToggle }) => {
         <Link
           to="/upload"
           className={cn(
-            "flex items-center px-3 py-2 bg-brand-700 text-white rounded-md transition-colors hover:bg-brand-800",
+            "flex items-center px-3 py-2 bg-[#e6f2ff] text-[#2c60b0] rounded-md transition-colors hover:bg-[#4285f4] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#2c60b0]",
             collapsed ? "justify-center" : ""
           )}
         >
